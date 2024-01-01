@@ -81,12 +81,12 @@ router.beforeEach((to, from, next) => {
     const requiresAuth = to.matched.some((x) => x.meta.auth);
  
     if (requiresAuth && !localStorage.getItem("token")) {
-        this.$router.push({ path: '/login' })
+        router.push({ path: '/login' })
         return;
     }
  
     if (localStorage.getItem("token") && ['/login', '/register'].includes(to.path)) {
-        this.$router.push({ path: '/' })
+        router.push({ path: '/' })
         return;
     }
  
