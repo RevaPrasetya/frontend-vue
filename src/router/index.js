@@ -56,8 +56,8 @@ const routes = [
 ];
 
 const router = createRouter({
-    mode: "history",
     history : createWebHistory(),
+    base: "https://group9-prognet.manpits.xyz",
     routes
 
 })
