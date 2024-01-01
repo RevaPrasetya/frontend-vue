@@ -17,9 +17,9 @@ const handleLogin = async () => {
     });
 
     localStorage.setItem('token', data.data.token);
-    localStorage.setItem('user', data.data);
+    localStorage.setItem('user', JSON.stringify(data.data));
 
-    window.location.href = '/';
+    this.$router.push({ path: '/' })
   } catch (error) {
     // Handle the error, e.g., show a message to the user or log the error
     console.error('Login failed:', error);
