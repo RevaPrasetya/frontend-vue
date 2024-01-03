@@ -12,8 +12,8 @@ onMounted(() => {
 const logout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
-    this.$router.push({ path: '/login' })
     isLoggedIn = false;
+    this.$router.push({ path: '/login' })
 };
 </script>
 
