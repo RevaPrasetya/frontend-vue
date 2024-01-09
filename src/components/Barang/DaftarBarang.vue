@@ -10,10 +10,13 @@ export default {
                 id: '',
                 satuan: '',
             },
-            daftarSatuan: []
+            daftarSatuan: [],
+            searchValues: {
+                barang: '',
+            },
         }
     },
-    mounted() {   
+    mounted() {
         this.tampilBarang();
         this.tampilSatuan();
     },
@@ -44,7 +47,32 @@ export default {
         getSatuan(satuan_id) {
             const satuan = this.daftarSatuan.find(satuan => satuan.id == satuan_id);
             return satuan ? satuan.satuan : 'Unknown';
-        }
+        },
+        filterBarang() {
+            // Jika daftar barang belum disimpan, simpan daftar barang asli
+            if (!this.originalDaftarBarang) {
+                this.originalDaftarBarang = [...this.daftarBarang];
+            }
+
+            const filterBarang = this.searchValues.barang.toLowerCase();
+
+            // Filter barang berdasarkan nama dan kode
+            let filteredBarang = this.originalDaftarBarang.filter((barang) => {
+                const nameMatch = barang.namabarang.toLowerCase().includes(filterBarang);
+                const kodeMatch = barang.kode.toLowerCase().includes(filterBarang);
+
+                // Return true jika nama atau kode cocok dengan filter
+                return nameMatch || kodeMatch;
+            });
+
+            // jika filter kosong, tampilkan semua barang
+            if (!filterBarang) {
+                this.tampilBarang();
+            } else {
+                // tampilkan barang yang sesuai dengan filter
+                this.daftarBarang = filteredBarang;
+            }
+        },
     }
 }
 </script>
@@ -64,14 +92,6 @@ export default {
                         Barang
                     </router-link>
                 </li>
-                <!-- <li>
-                <div class="flex items-center">
-                    <svg class="rtl:rotate-180 w-3 h-3 text-gray-400 mx-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
-                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/>
-                    </svg>
-                    <a href="#" class="ms-1 text-sm font-medium text-gray-700 hover:text-blue-600 md:ms-2 dark:text-gray-400 dark:hover:text-white">Daftar Penjualan</a>
-                </div>
-                </li> -->
                 <li aria-current="page">
                     <div class="flex items-center">
                         <svg class="rtl:rotate-180 w-3 h-3 text-gray-400 mx-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
@@ -98,7 +118,7 @@ export default {
                 <div id="dropdownAction" class="z-40 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600">
                     <ul class="py-1 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownActionButton">
                         <li>
-                            <router-link to="/satuan/tambah" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Tambah Barang</router-link>
+                            <router-link to="/barang/tambah" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Tambah Barang</router-link>
                         </li>
                     </ul>
                     <!-- <div class="py-1">
@@ -113,7 +133,7 @@ export default {
                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
                     </svg>
                 </div>
-                <input type="text" id="table-search-users" class="block pt-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Cari barang">
+                <input type="text" id="table-search-users" class="block pt-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Cari Nama/Kode Barang" v-model="searchValues.barang" @input="filterBarang">
             </div>
         </div>
 
